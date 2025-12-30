@@ -80,10 +80,10 @@ public class SiparisEkrani extends JFrame {
         lblAdresUyari.setBounds(100, 310, 350, 40);
         contentPane.add(lblAdresUyari);
 
-        // --- ONAY BUTONU ---
+        // ONAY BUTONU 
         JButton btnOnay = new JButton("SİPARİŞİ ONAYLA");
         btnOnay.setBackground(new Color(60, 179, 113));
-        btnOnay.setForeground(Color.WHITE);
+        btnOnay.setForeground(Color.GREEN);
         btnOnay.setFont(new Font("Arial", Font.BOLD, 14));
         btnOnay.setBounds(100, 370, 300, 50);
         contentPane.add(btnOnay);
@@ -111,7 +111,6 @@ public class SiparisEkrani extends JFrame {
     // Girdileri Kontrol Eden Metod
     private void siparisKontrolVeKayit() {
         String tel = txtTelefon.getText().trim();
-        // Girilen adresi temizleyip standart hale getiriyoruz (ILCE, MAHALLE, ISTANBUL olur)
         String temizAdres = metniTemizle(txtAdres.getText()); 
         
         // 1. KURAL: TELEFON
@@ -119,7 +118,7 @@ public class SiparisEkrani extends JFrame {
         if (tel.startsWith("0")) { hataGoster("Telefon numarası 0 ile başlayamaz!"); return; }
         if (!tel.matches("[0-9]+")) { hataGoster("Telefon sadece rakam içermelidir!"); return; }
         
-        // 2. KURAL: ADRES (Artık karakter sorunu yok)
+        // 2. KURAL: ADRES 
         if (!temizAdres.contains("MAHALLE")) { hataGoster("Adres 'Mahalle' bilgisi içermelidir!"); return; }
         if (!temizAdres.contains("CADDE") && !temizAdres.contains("SOKAK")) { hataGoster("Adres 'Cadde' veya 'Sokak' bilgisi içermelidir!"); return; }
         if (!temizAdres.contains("BINA") && !temizAdres.contains("NO")) { hataGoster("Bina Adı veya Numarası zorunludur!"); return; }
@@ -147,46 +146,67 @@ public class SiparisEkrani extends JFrame {
             for (String urun : AnaSayfa.sepetListesi) {
                 String[] parcalar = urun.split("-");
                 int id = Integer.parseInt(parcalar[0]);
-                int adet = Integer.parseInt(parcalar[1]);
+                int satilanAdet = Integer.parseInt(parcalar[1]);
                 
-                // Sipariş Kaydet
-                String sqlSiparis = "INSERT INTO siparisler (urun_id, adet, adres, telefon, durum) VALUES (?, ?, ?, ?, 'Onaylandi')";
-                PreparedStatement ps = conn.prepareStatement(sqlSiparis);
-                ps.setInt(1, id);
-                ps.setInt(2, adet);
-                ps.setString(3, txtAdres.getText());
-                ps.setString(4, "+90" + txtTelefon.getText());
-                ps.executeUpdate();
                 
-                // Stok Düş
-                String sqlStok = "UPDATE urunler SET miktar = miktar - ? WHERE urun_id = ?";
-                PreparedStatement psStok = conn.prepareStatement(sqlStok);
-                psStok.setInt(1, adet);
-                psStok.setInt(2, id);
-                psStok.executeUpdate();
+                String sqlBilgi = "SELECT miktar, min_stok, max_stok, urun_adi FROM urunler WHERE urun_id = ?";
+                PreparedStatement psBilgi = conn.prepareStatement(sqlBilgi);
+                psBilgi.setInt(1, id);
+                ResultSet rs = psBilgi.executeQuery();
                 
-                // Otomatik Sipariş Kontrolü
-                String sqlKontrol = "SELECT miktar, min_stok, max_stok FROM urunler WHERE urun_id = ?";
-                PreparedStatement psKontrol = conn.prepareStatement(sqlKontrol);
-                psKontrol.setInt(1, id);
-                ResultSet rs = psKontrol.executeQuery();
-                
-                if(rs.next()) {
-                    int guncelStok = rs.getInt("miktar");
+                if (rs.next()) {
+                    int mevcutStok = rs.getInt("miktar");
                     int minStok = rs.getInt("min_stok");
                     int maxStok = rs.getInt("max_stok");
+                    String urunAdi = rs.getString("urun_adi");
                     
-                    if (guncelStok < minStok) {
-                        String sqlOtomatik = "UPDATE urunler SET miktar = ? WHERE urun_id = ?";
-                        PreparedStatement psOto = conn.prepareStatement(sqlOtomatik);
+                    // Stoktan düşüyoruz
+                    int yeniStok = mevcutStok - satilanAdet;
+                    
+                    // A) Müşterinin Siparişini Kaydet
+                    String sqlMusteriSiparis = "INSERT INTO siparisler (urun_id, adet, adres, telefon, durum) VALUES (?, ?, ?, ?, 'Müşteri Siparişi')";
+                    PreparedStatement psMus = conn.prepareStatement(sqlMusteriSiparis);
+                    psMus.setInt(1, id);
+                    psMus.setInt(2, satilanAdet);
+                    psMus.setString(3, txtAdres.getText());
+                    psMus.setString(4, "+90" + txtTelefon.getText());
+                    psMus.executeUpdate();
+                    
+                    // B) Ürün Stoğunu Güncelle (Düşür)
+                    String sqlGuncelle = "UPDATE urunler SET miktar = ? WHERE urun_id = ?";
+                    PreparedStatement psGuncelle = conn.prepareStatement(sqlGuncelle);
+                    psGuncelle.setInt(1, yeniStok);
+                    psGuncelle.setInt(2, id);
+                    psGuncelle.executeUpdate();
+                    
+                    // C) KRİTİK KONTROL
+                    // Eğer yeni stok, minimumun altına indiyse?
+                    if (yeniStok < minStok) {
+                        int siparisEdilecekMiktar = maxStok - yeniStok; // Depoyu max'a tamamlayacak miktar
+                        
+                        // Depoyu Geri Doldur (Max yap)
+                        String sqlOtoDolum = "UPDATE urunler SET miktar = ? WHERE urun_id = ?";
+                        PreparedStatement psOto = conn.prepareStatement(sqlOtoDolum);
                         psOto.setInt(1, maxStok);
                         psOto.setInt(2, id);
                         psOto.executeUpdate();
+                        
+                        
+                        String sqlSistemSiparis = "INSERT INTO siparisler (urun_id, adet, adres, telefon, durum) VALUES (?, ?, ?, ?, 'SİSTEM OTO. TEDARİK')";
+                        PreparedStatement psSis = conn.prepareStatement(sqlSistemSiparis);
+                        psSis.setInt(1, id);
+                        psSis.setInt(2, siparisEdilecekMiktar);
+                        psSis.setString(3, "DEPO MERKEZ - OTOMATİK DOLUM");
+                        psSis.setString(4, "SISTEM");
+                        psSis.executeUpdate();
+                        
+                        
+                        System.out.println("UYARI: " + urunAdi + " stoğu azaldı. Sistem otomatik olarak " + siparisEdilecekMiktar + " adet sipariş geçti.");
                     }
                 }
             }
             
-            JOptionPane.showMessageDialog(null, "Siparişiniz Başarıyla Alındı!\n(Stoklar güncellendi)");
+            JOptionPane.showMessageDialog(null, "Siparişiniz Başarıyla Alındı!\n(Stok kontrolleri yapıldı)");
             AnaSayfa.sepetListesi.clear(); 
             dispose(); 
             
@@ -195,4 +215,5 @@ public class SiparisEkrani extends JFrame {
             JOptionPane.showMessageDialog(null, "Sistem Hatası: " + e.getMessage());
         }
     }
+    
 }

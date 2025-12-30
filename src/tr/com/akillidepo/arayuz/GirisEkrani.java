@@ -40,17 +40,17 @@ public class GirisEkrani extends JFrame {
         setTitle("Akıllı Depo Sistemi - Giriş");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 450, 350);
-        setResizable(false); // Ekran boyutu sabit kalsın
+        setResizable(false);
         
         contentPane = new JPanel();
-        contentPane.setBackground(new Color(245, 245, 245)); // Açık gri modern arka plan
+        contentPane.setBackground(new Color(245, 245, 245)); 
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
-        contentPane.setLayout(null); // Özgür tasarım için null layout
+        contentPane.setLayout(null); 
 
         // Başlık
         JLabel lblBaslik = new JLabel("AKILLI DEPO GİRİŞİ");
-        lblBaslik.setForeground(new Color(70, 130, 180)); // Mavi ton
+        lblBaslik.setForeground(new Color(70, 130, 180));
         lblBaslik.setFont(new Font("Arial", Font.BOLD, 22));
         lblBaslik.setBounds(110, 30, 250, 30);
         contentPane.add(lblBaslik);
@@ -83,8 +83,8 @@ public class GirisEkrani extends JFrame {
         // GİRİŞ YAP BUTONU
         JButton btnGiris = new JButton("GİRİŞ YAP");
         btnGiris.setFont(new Font("Arial", Font.BOLD, 14));
-        btnGiris.setBackground(new Color(60, 179, 113)); // Yeşil buton
-        btnGiris.setForeground(Color.WHITE); // Beyaz yazı
+        btnGiris.setBackground(new Color(60, 179, 113));
+        btnGiris.setForeground(Color.RED);
         btnGiris.setBounds(160, 200, 200, 40);
         contentPane.add(btnGiris);
 
@@ -112,7 +112,7 @@ public class GirisEkrani extends JFrame {
             if (rs.next()) {
                 String rol = rs.getString("rol");
                 JOptionPane.showMessageDialog(null, "Giriş Başarılı! Hoşgeldiniz: " + rol);
-                dispose(); // Giriş ekranını kapat
+                dispose();
                 AnaSayfa anaSayfa = new AnaSayfa(rol);
                 anaSayfa.setVisible(true);
                 

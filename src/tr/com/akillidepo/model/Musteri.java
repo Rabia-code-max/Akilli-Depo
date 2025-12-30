@@ -1,7 +1,7 @@
 package tr.com.akillidepo.model;
 
 public class Musteri extends Kullanici {
-    // Müşterinin ekstra özellikleri olacak
+    
     private String adres;
     private String telefon;
 
@@ -9,7 +9,7 @@ public class Musteri extends Kullanici {
         super(id, kadi, sifre, "Musteri");
     }
     
-    // Getter ve Setter metodları
+    
     public String getAdres() { 
     	return adres; 
     	}

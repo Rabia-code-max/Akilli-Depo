@@ -2,7 +2,6 @@ package tr.com.akillidepo.model;
 
 public abstract class Kullanici implements IKullaniciIslemleri {
     
-    // Protected: Sadece miras alan çocuklar erişebilir
     protected int id;
     protected String kullaniciAdi;
     protected String sifre;
@@ -27,7 +26,6 @@ public abstract class Kullanici implements IKullaniciIslemleri {
     
     @Override
     public boolean girisYap(String kadi, String sifre) {
-        // Varsayılan giriş kontrolü (veritabanından da yapılacak)
         return this.kullaniciAdi.equals(kadi) && this.sifre.equals(sifre);
     }
 }

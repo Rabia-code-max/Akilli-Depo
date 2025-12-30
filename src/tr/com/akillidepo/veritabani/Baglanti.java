@@ -8,14 +8,14 @@ public class Baglanti {
     
     // Veritabanı bilgileri
     private static final String KULLANICI_ADI = "root";
-    private static final String SIFRE = "root2507"; // <-- MySQL Şifrenle değiştir
+    private static final String SIFRE = "root2507";
     private static final String DB_ISMI = "akilli_depo";
-    // Türkçe karakter ve saat dilimi ayarları eklenmiş bağlantı adresi
+    
     private static final String HOST = "jdbc:mysql://localhost:3306/" + DB_ISMI + "?useSSL=false&serverTimezone=Turkey&useUnicode=true&characterEncoding=UTF-8";
     
     private static Connection connection = null;
 
-    // Bağlantıyı getiren metod (Singleton yapısı)
+    // Bağlantıyı getiren metod 
     public static Connection getBaglanti() {
         try {
             if (connection == null || connection.isClosed()) {

@@ -21,13 +21,13 @@ public class UrunYonetimEkrani extends JFrame {
 
     private JPanel contentPane;
     private JTextField txtUrunAdi, txtMiktar, txtMin, txtMax, txtRafBolum, txtRafNo, txtBolumNo, txtSilId;
-    private AnaSayfa anaSayfaRef; // Ana sayfayı yenilemek için referans
+    private AnaSayfa anaSayfaRef;
 
     public UrunYonetimEkrani(AnaSayfa anaSayfa) {
         this.anaSayfaRef = anaSayfa;
         
         setTitle("Ürün Yönetim Paneli");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Sadece bu pencereyi kapat
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 400, 550);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -39,7 +39,7 @@ public class UrunYonetimEkrani extends JFrame {
         lblBaslik.setBounds(120, 10, 200, 20);
         contentPane.add(lblBaslik);
 
-        // --- FORM ALANLARI ---
+        // FORM ALANLARI
         txtUrunAdi = formElemaniEkle("Ürün Adı:", 40);
         txtMiktar = formElemaniEkle("Miktar:", 80);
         txtMin = formElemaniEkle("Min Stok:", 120);
@@ -48,10 +48,10 @@ public class UrunYonetimEkrani extends JFrame {
         txtRafNo = formElemaniEkle("Raf No:", 240);
         txtBolumNo = formElemaniEkle("Bölüm No:", 280);
 
-        // --- EKLE BUTONU ---
+        // EKLE BUTONU 
         JButton btnEkle = new JButton("ÜRÜNÜ SİSTEME EKLE");
         btnEkle.setBackground(new Color(60, 179, 113));
-        btnEkle.setForeground(Color.WHITE);
+        btnEkle.setForeground(Color.GREEN);
         btnEkle.setBounds(50, 330, 280, 40);
         contentPane.add(btnEkle);
         
@@ -61,12 +61,12 @@ public class UrunYonetimEkrani extends JFrame {
             }
         });
 
-        // --- AYIRAÇ ---
+        // AYIRAÇ
         JLabel lblAyirac = new JLabel("---------------------------------------------------------------");
         lblAyirac.setBounds(20, 380, 350, 14);
         contentPane.add(lblAyirac);
         
-        // --- SİLME BÖLÜMÜ ---
+        // SİLME BÖLÜMÜ
         JLabel lblSil = new JLabel("ÜRÜN SİL (ID Giriniz):");
         lblSil.setFont(new Font("Arial", Font.BOLD, 14));
         lblSil.setBounds(20, 410, 150, 20);
@@ -89,7 +89,7 @@ public class UrunYonetimEkrani extends JFrame {
         });
     }
     
-    // Pratik text field oluşturucu
+    
     private JTextField formElemaniEkle(String etiket, int y) {
         JLabel lbl = new JLabel(etiket);
         lbl.setBounds(20, y, 150, 20);
@@ -101,7 +101,7 @@ public class UrunYonetimEkrani extends JFrame {
         return txt;
     }
 
-    // --- VERİTABANI İŞLEMLERİ ---
+    // VERİTABANI İŞLEMLERİ
     
     private void urunEkle() {
         try {
@@ -120,9 +120,9 @@ public class UrunYonetimEkrani extends JFrame {
             ps.executeUpdate();
             JOptionPane.showMessageDialog(null, "Ürün Başarıyla Eklendi!");
             
-            // Ana sayfadaki tabloyu yenile
+            
             anaSayfaRef.urunleriGetir(); 
-            dispose(); // Pencereyi kapat
+            dispose();
             
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Hata: " + e.getMessage());
@@ -139,7 +139,7 @@ public class UrunYonetimEkrani extends JFrame {
             int sonuc = ps.executeUpdate();
             if(sonuc > 0) {
                 JOptionPane.showMessageDialog(null, "Ürün Silindi!");
-                anaSayfaRef.urunleriGetir(); // Tabloyu yenile
+                anaSayfaRef.urunleriGetir();
                 txtSilId.setText("");
             } else {
                 JOptionPane.showMessageDialog(null, "Bu ID ile ürün bulunamadı.");
