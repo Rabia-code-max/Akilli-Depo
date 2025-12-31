@@ -42,9 +42,9 @@ Bir deponun stok durumunu anlık olarak takip etmek, azalan ürünler için otom
 ## Giriş Bilgileri
 
 |     Rol      | Kullanıcı Adı | Şifre  |
-| **Yönetici** |   `admin`     | `1234` |
-| **Çalışan**  |   `worker`    | `1234` |
-| **Müşteri**  |  `musteri1`   | `1234` |
+| **Yönetici** |   `müdür`     | `2025` |
+| **Çalışan**  |  `calisan`    | `2025` |
+| **Müşteri**  |  `musteri`    | `2025` |
 
 
 ---
