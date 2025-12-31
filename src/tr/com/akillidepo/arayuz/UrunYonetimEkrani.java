@@ -77,8 +77,8 @@ public class UrunYonetimEkrani extends JFrame {
         contentPane.add(txtSilId);
         
         JButton btnSil = new JButton("SİL");
-        btnSil.setBackground(Color.RED);
-        btnSil.setForeground(Color.WHITE);
+        btnSil.setBackground(Color.WHITE);
+        btnSil.setForeground(Color.RED);
         btnSil.setBounds(180, 450, 150, 30);
         contentPane.add(btnSil);
         
@@ -101,8 +101,7 @@ public class UrunYonetimEkrani extends JFrame {
         return txt;
     }
 
-    // VERİTABANI İŞLEMLERİ
-    
+    // VERİTABANI İŞLEMLERİ  
     private void urunEkle() {
         try {
             Connection conn = Baglanti.getBaglanti();

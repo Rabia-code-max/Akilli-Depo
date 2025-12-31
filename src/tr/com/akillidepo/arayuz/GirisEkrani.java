@@ -2,12 +2,15 @@ package tr.com.akillidepo.arayuz;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -42,22 +45,36 @@ public class GirisEkrani extends JFrame {
         setBounds(100, 100, 450, 350);
         setResizable(false);
         
-        contentPane = new JPanel();
-        contentPane.setBackground(new Color(245, 245, 245)); 
+        // ARKA PLAN RESMİ AYARI
+        contentPane = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                
+                ImageIcon icon = new ImageIcon("images/giris_bg.jpg"); 
+                Image img = icon.getImage();
+                
+                g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+        
+        
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
         contentPane.setLayout(null); 
 
         // Başlık
         JLabel lblBaslik = new JLabel("AKILLI DEPO GİRİŞİ");
-        lblBaslik.setForeground(new Color(70, 130, 180));
+        
+        lblBaslik.setForeground(new Color(0, 0, 5)); 
         lblBaslik.setFont(new Font("Arial", Font.BOLD, 22));
         lblBaslik.setBounds(110, 30, 250, 30);
         contentPane.add(lblBaslik);
 
         // Kullanıcı Adı Etiketi
         JLabel lblKullanici = new JLabel("Kullanıcı Adı:");
-        lblKullanici.setFont(new Font("Arial", Font.PLAIN, 14));
+        lblKullanici.setFont(new Font("Arial", Font.BOLD, 14));
+        lblKullanici.setForeground(Color.BLACK); 
         lblKullanici.setBounds(50, 100, 100, 20);
         contentPane.add(lblKullanici);
 
@@ -70,7 +87,8 @@ public class GirisEkrani extends JFrame {
 
         // Şifre Etiketi
         JLabel lblSifre = new JLabel("Şifre:");
-        lblSifre.setFont(new Font("Arial", Font.PLAIN, 14));
+        lblSifre.setFont(new Font("Arial", Font.BOLD, 14));
+        lblSifre.setForeground(Color.BLACK); 
         lblSifre.setBounds(50, 150, 100, 20);
         contentPane.add(lblSifre);
 
@@ -83,12 +101,11 @@ public class GirisEkrani extends JFrame {
         // GİRİŞ YAP BUTONU
         JButton btnGiris = new JButton("GİRİŞ YAP");
         btnGiris.setFont(new Font("Arial", Font.BOLD, 14));
-        btnGiris.setBackground(new Color(60, 179, 113));
-        btnGiris.setForeground(Color.RED);
+        btnGiris.setBackground(new Color(60, 179, 113)); 
+        btnGiris.setForeground(Color.BLACK); 
         btnGiris.setBounds(160, 200, 200, 40);
         contentPane.add(btnGiris);
 
-        
         btnGiris.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 girisKontrol();
@@ -115,8 +132,6 @@ public class GirisEkrani extends JFrame {
                 dispose();
                 AnaSayfa anaSayfa = new AnaSayfa(rol);
                 anaSayfa.setVisible(true);
-                
-              
             } else {
                 JOptionPane.showMessageDialog(null, "Hatalı Kullanıcı Adı veya Şifre!", "Hata", JOptionPane.ERROR_MESSAGE);
             }

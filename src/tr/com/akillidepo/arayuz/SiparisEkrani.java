@@ -40,7 +40,7 @@ public class SiparisEkrani extends JFrame {
         lblBaslik.setBounds(150, 20, 250, 30);
         contentPane.add(lblBaslik);
         
-        // --- TELEFON ---
+        // TELEFON 
         JLabel lblTel = new JLabel("Telefon:");
         lblTel.setBounds(30, 80, 100, 20);
         contentPane.add(lblTel);
@@ -62,7 +62,7 @@ public class SiparisEkrani extends JFrame {
         lblUyari.setBounds(140, 110, 250, 15);
         contentPane.add(lblUyari);
 
-        // --- ADRES ---
+        // ADRES
         JLabel lblAdres = new JLabel("Adres:");
         lblAdres.setBounds(30, 150, 100, 20);
         contentPane.add(lblAdres);
@@ -95,7 +95,7 @@ public class SiparisEkrani extends JFrame {
         });
     }
     
-    // YARDIMCI METOD: Türkçe karakterleri İngilizceye çevirir (İ->I, Ç->C, Ş->S gibi)
+    // Türkçe karakterleri İngilizceye çevirir (İ->I, Ç->C, Ş->S vb...)
     private String metniTemizle(String metin) {
         String temiz = metin.toUpperCase();
         temiz = temiz.replace("İ", "I");
@@ -113,20 +113,38 @@ public class SiparisEkrani extends JFrame {
         String tel = txtTelefon.getText().trim();
         String temizAdres = metniTemizle(txtAdres.getText()); 
         
-        // 1. KURAL: TELEFON
-        if (tel.length() != 10) { hataGoster("Telefon numarası tam 10 haneli olmalıdır!"); return; }
-        if (tel.startsWith("0")) { hataGoster("Telefon numarası 0 ile başlayamaz!"); return; }
-        if (!tel.matches("[0-9]+")) { hataGoster("Telefon sadece rakam içermelidir!"); return; }
+        // TELEFON
+        if (tel.length() != 10) { 
+        	hataGoster("Telefon numarası tam 10 haneli olmalıdır!"); 
+        	return; }
+        if (tel.startsWith("0")) { 
+        	hataGoster("Telefon numarası 0 ile başlayamaz!"); 
+        	return; }
+        if (!tel.matches("[0-9]+")) { 
+        	hataGoster("Telefon sadece rakam içermelidir!"); 
+        	return; }
         
-        // 2. KURAL: ADRES 
-        if (!temizAdres.contains("MAHALLE")) { hataGoster("Adres 'Mahalle' bilgisi içermelidir!"); return; }
-        if (!temizAdres.contains("CADDE") && !temizAdres.contains("SOKAK")) { hataGoster("Adres 'Cadde' veya 'Sokak' bilgisi içermelidir!"); return; }
-        if (!temizAdres.contains("BINA") && !temizAdres.contains("NO")) { hataGoster("Bina Adı veya Numarası zorunludur!"); return; }
-        if (!temizAdres.contains("DAIRE")) { hataGoster("Daire numarası zorunludur!"); return; }
-        if (!temizAdres.contains("ILCE")) { hataGoster("İlçe bilgisi zorunludur!"); return; }
-        if (!temizAdres.contains("IL")) { hataGoster("İl bilgisi zorunludur!"); return; }
+        // ADRES 
+        if (!temizAdres.contains("MAHALLE")) { 
+        	hataGoster("Adres 'Mahalle' bilgisi içermelidir!"); 
+        	return; }
+        if (!temizAdres.contains("CADDE") && !temizAdres.contains("SOKAK")) { 
+        	hataGoster("Adres 'Cadde' veya 'Sokak' bilgisi içermelidir!"); 
+        	return; }
+        if (!temizAdres.contains("BINA") && !temizAdres.contains("NO")) { 
+        	hataGoster("Bina Adı veya Numarası zorunludur!"); 
+        	return; }
+        if (!temizAdres.contains("DAIRE")) { 
+        	hataGoster("Daire numarası zorunludur!"); 
+        	return; }
+        if (!temizAdres.contains("ILCE")) { 
+        	hataGoster("İlçe bilgisi zorunludur!"); 
+        	return; }
+        if (!temizAdres.contains("IL")) { 
+        	hataGoster("İl bilgisi zorunludur!"); 
+        	return; }
         
-        // 3. KURAL: ŞEHİR (Sadece İSTANBUL)
+        // ŞEHİR (Sadece İSTANBUL)
         if (!temizAdres.contains("ISTANBUL")) {
             hataGoster("Üzgünüz! Depomuz sadece İSTANBUL içine hizmet vermektedir.");
             return;
@@ -182,7 +200,7 @@ public class SiparisEkrani extends JFrame {
                     // C) KRİTİK KONTROL
                     // Eğer yeni stok, minimumun altına indiyse?
                     if (yeniStok < minStok) {
-                        int siparisEdilecekMiktar = maxStok - yeniStok; // Depoyu max'a tamamlayacak miktar
+                        int siparisEdilecekMiktar = maxStok - yeniStok;
                         
                         // Depoyu Geri Doldur (Max yap)
                         String sqlOtoDolum = "UPDATE urunler SET miktar = ? WHERE urun_id = ?";
