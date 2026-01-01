@@ -52,3 +52,16 @@ Bir deponun stok durumunu anlık olarak takip etmek, azalan ürünler için otom
 
 ### 🎥 Proje Tanıtım Videosu
 [Videoyu İzlemek İçin Tıklayın](https://youtu.be/hQYeJPAXSrQ?si=ZukbsYyHtyS3zA6j)
+
+
+Project :
+https://github.com/Rabia-code-max/Akilli-Depo
+Video :
+https://www.youtube.com/watch?v=hQYeJPAXSrQ
+
+Bu projeye katılanlar :
+1-Rabia İLHAN 
+2-Mohamed Ramadan Darwesh Ebrahem Darwesh
+3-Sevda TANACI 
+4-Can Efe Kaya
+
