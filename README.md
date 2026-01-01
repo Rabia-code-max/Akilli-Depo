@@ -49,3 +49,6 @@ Bir deponun stok durumunu anlık olarak takip etmek, azalan ürünler için otom
 
 ---
 *Bu proje, Nesne Tabanlı Programlama dersi kapsamında geliştirilmiştir.*
+
+### 🎥 Proje Tanıtım Videosu
+[Videoyu İzlemek İçin Tıklayın](https://youtu.be/hQYeJPAXSrQ?si=ZukbsYyHtyS3zA6j)
